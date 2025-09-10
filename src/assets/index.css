@@ -1,0 +1,1632 @@
+/* Import Bootstrap CSS */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+/* CSS Variables for Theme Support */
+:root {
+  /* Dark Theme (Default) */
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #252525; /* Cor de fundo da Sidebar */
+  --bg-editor: #1e1e1e;    /* Cor de fundo do Editor */
+  --bg-quaternary: #2c2c2c; /* Usado para blocos de código, etc. */
+  --bg-notelist: #27273a; /* Cor específica para o painel da lista de notas. Sinta-se à vontade para usar #0066ff ou outra cor. */
+  
+  --text-primary: #F8F8F2;
+  --text-secondary: #aaa;
+  --text-tertiary: #3a3a3a; /* Antigo text-muted */
+  --text-contrast: #d8d8d8; /* Texto de alto contraste para usar sobre cores de destaque */
+  --toolbar-icon-color: var(--text-primary); /* Cor para os ícones da toolbar */
+  --text-highlight: #000000; /* Cor de destaque para texto, como preto */
+  
+  --separator-primary: #121212; /* Antigo border-color, menos "duro" que preto puro */
+  --separator-secondary: #2a2a2a; /* Antigo border-light */
+  --separator-tertiary: #333; /* Antigo border-subtle */
+  
+  /* Usando um amarelo mais vibrante e acessível como destaque principal da marca */
+  --accent-primary: #403f43; /* Cor systemYellow da Apple */
+  --accent-secondary: #1e1e1e; /* Um tom ligeiramente mais escuro para elementos secundários */
+  /* Usando um azul aprimorado para P3 para links e ações, com fallback para sRGB */
+  --accent-blue: #0080ff; /* Fallback */
+  --accent-blue: color(display-p3 0 0.478 1); /* P3 Blue */
+  --accent-yellow: #ffcc00;
+  --accent-green: #28a745;
+  --accent-danger: #e5484d; /* A slightly less harsh red for dark mode */
+  
+  --button-bg: #403F43;
+  --button-hover: #5a585c;
+  --button-active: #4b4b4b;
+  
+  --scrollbar-track: #171717;
+  --scrollbar-thumb: #333;
+  --scrollbar-thumb-hover: #555;
+  
+  --modal-bg: #2c2c2e; /* Mais claro que o anterior #232326 */
+  --modal-text: #fff;
+  --modal-input-field-bg: #252525; /* Mais claro para melhor visibilidade */
+  --modal-input-field-border: #48484a; /* Border mais visível */
+  --modal-accent-button-bg: #0080ff;
+  --modal-accent-button-text: #fff;
+  
+  --window-control-bg: #403f43;
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  --bg-primary: #fdfdfd;
+  --bg-secondary: #F6F6F6;
+  --bg-editor: #fdfdfd;    /* Cor de fundo do Editor no tema claro */
+  --bg-quaternary: #f0f0f0; /* Usado para blocos de código, etc. */
+  --bg-notelist: #ffffff; /* Cor específica para o painel da lista de notas no tema claro */
+  
+  --text-primary: #1d1d1f;
+  --text-secondary: #666666;
+  --text-tertiary: #8e8e93; /* Antigo text-muted */
+  --text-contrast: #ffffff;
+  --toolbar-icon-color: #555555; /* Cor customizada para os ícones da toolbar no tema claro */
+  --text-highlight: #000000; /* Cor de destaque para texto, como preto */
+
+  
+  --separator-primary: #d1d1d6; /* Antigo border-color */
+  --separator-secondary: #e5e5ea; /* Antigo border-light */
+  --separator-tertiary: #f2f2f7; /* Antigo border-subtle */
+  
+  /* Marca consistente com o tema escuro */
+  --accent-primary: #ff0000; /* muda a cor de destaque da nota selecionada */
+  --accent-secondary: #333333; /* Um tom ligeiramente mais escuro para elementos secundários */
+  --accent-blue: #5b2eff; /* define a cor de botoes gerais principalmente em modais */
+  --accent-yellow: #ffa200;
+  --accent-green: #28a745;
+  --accent-danger: #dc3545; /* Standard bootstrap danger */
+  --accent-light: #8a8a8a; /* define a cor de botoes pressionados na toolbar */
+  
+  --button-bg: #EEEDE9;
+  --button-hover: #e0e0e0;
+  --button-active: #e9e9e9;
+  
+  --scrollbar-track: #f0f0f0;
+  --scrollbar-thumb: #c0c0c0;
+  --scrollbar-thumb-hover: #a0a0a0;
+  
+  --modal-bg: #ffffff;
+  --modal-text: #1d1d1f;
+  --modal-input-field-bg: #fafaff;
+  --modal-input-field-border: #d1d1d6;
+  --modal-accent-button-bg: #007aff;
+  --modal-accent-button-text: white;
+  
+  /* Circulo de controle */
+  --window-control-bg: #ff0000;
+}
+
+/* CORREÇÃO: Estilo do botão de nova nota para o tema claro */
+[data-theme="light"] .new-note-button-fixed {
+  /* Garante que a borda use a cor correta do tema claro */
+  border-color: var(--separator-primary) !important;
+}
+
+/* Global Styles */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  height: 100vh;
+  overflow: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#root {
+  height: 100%;
+}
+
+/* Basic three-panel layout styling */
+.app-container {
+  display: flex;
+  height: 100vh;
+  background-color: var(--bg-primary);
+}
+
+.sidebar-panel {
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--separator-primary);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Mantém a rolagem */
+  height: 100%; /* Garante que o painel ocupe toda a altura disponível */
+  min-height: 0; /* Evita expansão em flexbox */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.sidebar-panel .mb-3 {
+  /* Antes: overflow-y: auto; */
+  overflow: visible; /* Permite que dropdowns ultrapassem o contêiner */
+}
+.folder-list-container {
+  overflow: visible !important;
+}
+
+.note-list-panel {
+  background-color: var(--bg-notelist); /* Usa a nova variável de cor */
+  border-right: 1px solid var(--separator-secondary);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Mantém para evitar expansão */
+  height: 100%; /* Garante que o painel ocupe a altura do pai */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.note-list-scroll-container {
+  overflow-y: auto;
+  flex-grow: 1;
+  min-height: 0; /* Adicionado para reforçar a restrição de altura */
+}
+
+.editor-panel {
+  flex-grow: 1;
+  background-color: var(--bg-editor);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  transition: background-color 0.3s ease;
+}
+
+/* Lexical Editor styling */
+.lexical-editor-container {
+  flex-grow: 1;
+  position: relative;
+  /* O scroll deve acontecer aqui */
+  overflow-y: auto;
+}
+
+.editor-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  position: relative; /* Garante contexto para posicionamento absoluto */
+  min-height: 0;
+}
+/* Correção para o painel do editor */
+.editor-panel {
+  flex-grow: 1;
+  background-color: var(--bg-editor);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  /* Removido: overflow-y: auto que estava no painel pai */
+  /* Adicionado: configuração correta para flexbox */
+  min-height: 0;
+  height: 100%;
+  transition: background-color 0.3s ease;
+}
+
+/* Garante que o RichTextPlugin ocupe o espaço disponível */
+.lexical-editor-container > div:first-child {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Correção adicional para o ContentEditable */
+.lexical-editor-container .editor-input[contenteditable="true"] {
+  height: 100%; /* Ocupa todo o espaço do contêiner */
+  width: 100%;
+  padding: 15px 10px;
+  outline: none;
+  overflow-wrap: break-word;
+  /* O overflow-y já está no contêiner pai, então 'auto' aqui é redundante
+     e pode causar problemas. */
+}
+
+/* Melhoria na visualização do scrollbar no editor */
+.lexical-editor-container .editor-input::-webkit-scrollbar {
+  width: 8px;
+}
+
+.lexical-editor-container .editor-input::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 4px;
+}
+
+.lexical-editor-container .editor-input::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.lexical-editor-container .editor-input::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+
+/* Correção para o input do editor */
+.lexical-editor-container .editor-input {
+  min-height: 150px;
+  /* Removido: height: 100% que estava causando problemas */
+  resize: none;
+  font-size: 15px;    
+  position: relative;
+  tab-size: 1;
+  outline: none;
+  padding: 15px 10px;
+  caret-color: var(--text-tertiary);
+  background-color: var(--bg-editor);
+  color: var(--text-primary);
+  border: 1px solid var(--bg-editor);
+  transition: all 0.3s ease;
+  /* Adicionado: permite que o conteúdo cresça naturalmente */
+  overflow-y: auto;
+  width: 100%;
+}
+
+.lexical-editor-container .editor-placeholder-lexical {
+  font-size: 15px;
+  color: var(--text-tertiary);
+  overflow: hidden;
+  position: absolute;
+  text-overflow: ellipsis;
+  top: 15px;
+  left: 10px;
+  user-select: none;
+  white-space: nowrap;
+  display: inline-block;
+  pointer-events: none;
+  transition: color 0.3s ease;
+}
+
+/* Note Item Styles */
+
+.note-item {
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--separator-secondary); /* Adiciona a linha separadora */
+  border-radius: 8px; /* Remove os cantos arredondados */
+  margin-bottom: 8px; /* Remove a margem para um visual de lista contínua */
+}
+
+.note-item:hover {
+  background-color: var(--button-hover);
+}
+
+.note-item.selected {
+  background-color: var(--accent-primary);
+  /* Garante que o texto em itens selecionados tenha alto contraste */
+  color: var(--text-contrast) !important;
+}
+
+.note-item.selected .note-date,
+.note-item.selected .note-folder span,
+.note-item.selected .note-folder i {
+  /* Garante que os metadados em itens selecionados também tenham alto contraste */
+  color: var(--text-contrast) !important;
+}
+
+.note-item-preview {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.note-metadata {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8em;
+  color: var(--text-tertiary);
+  transition: color 0.3s ease;
+}
+
+/* Data de criação da nota no editor */
+.note-creation-date {
+  color: var(--text-tertiary);
+}
+
+.note-folder {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.note-folder i {
+  color: var(--accent-secondary);
+  transition: color 0.3s ease;
+}
+
+.metadata-separator {
+  opacity: 0.5;
+}
+
+/* New Folder */
+.new-folder-button {
+  background-color: var(--button-bg);
+  border-radius: 25px;
+  padding: 10px 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid var(--separator-secondary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  color: var(--text-primary); /* Garante que o texto seja visível */
+}
+
+
+.new-folder-button:hover {
+  background-color: var(--button-active);
+}
+
+/* Folder Items */
+.folder-item {
+  padding: 8px 20px; /* Aumentado o padding horizontal de 10px para 20px */
+  margin-bottom: 5px;
+  border-radius: 50px !important; /* Altere este valor para o que desejar */
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  color: var(--text-primary) !important;
+  background-color: var(--bg-secondary) !important;
+  border-bottom: none !important;
+}
+
+.folder-item:hover {
+  background-color: var(--button-active);
+}
+
+.folder-item.active-folder {
+  background-color: var(--accent-secondary) !important;
+  color: var(--text-contrast) !important;
+}
+
+.folder-item.active-folder .folder-name,
+.folder-item.active-folder i {
+  color: var(--text-contrast);
+}
+
+/* MODIFICADO: O estilo de "drag over" só se aplica quando um item está sendo arrastado */
+.folder-item.drag-target.drag-over {
+  background-color: var(--accent-blue) !important;
+  border-color: var(--accent-blue) !important;
+  color: var(--text-contrast) !important;
+  border: 2px dashed color-mix(in srgb, var(--accent-blue) 60%, #fff) !important;
+  border-radius: 8px !important;
+}
+
+
+.folder-item i {
+  margin-right: 8px;
+  color: var(--text-tertiary); /* Changed from --accent-secondary for better visibility */
+  transition: color 0.3s ease;
+}
+
+/* Folder icon color control via CSS */
+.folder-icon {
+  color: var(--text-secondary); /* Changed from --accent-secondary for better visibility in dark mode */
+  transition: color 0.3s ease;
+  font-size: 20px;
+}
+
+.folder-item.active-folder .folder-icon {
+  color: var(--text-contrast);
+}
+
+/* Exemplo de cor diferente para pastas especiais */
+.folder-item .bi-trash3.folder-icon {
+  color: #dc3545; /* vermelho para lixeira */
+}
+.folder-item.active-folder .bi-trash3.folder-icon {
+  color: #fff;
+}
+.folder-item .bi-collection.folder-icon {
+  color: var(--accent-blue);
+}
+.folder-item.active-folder .bi-collection.folder-icon {
+  color: #fff;
+}
+
+/* Light theme adjustments */
+[data-theme="light"] .folder-icon {
+  color: #000;
+}
+[data-theme="light"] .folder-item.active-folder .folder-icon {
+  color: #fff;
+}
+
+.folder-name {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Generic Editor Styles */
+.editor-placeholder {
+  color: var(--text-tertiary);
+  position: absolute;
+  top: 15px;
+  left: 10px;
+  pointer-events: none;
+  transition: color 0.3s ease;
+}
+
+.editor-paragraph { 
+  margin-bottom: 8px; 
+}
+
+.editor-heading-h1 { 
+  font-size: 2em; 
+  font-weight: bold; 
+  margin-top: 12px; 
+  margin-bottom: 6px;
+}
+
+.editor-text-bold { 
+  font-weight: bold; 
+}
+
+.editor-text-italic { 
+  font-style: italic; 
+}
+
+.editor-text-underline {
+  text-decoration: underline;
+}
+
+.editor-text-strikethrough {
+  text-decoration: line-through;
+}
+
+.editor-text-code {
+  background-color: var(--bg-quaternary);
+  padding: 1px 5px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9em;
+  border-radius: 3px;
+}
+
+.editor-text-highlight {
+  color: var(--text-highlight);
+  padding: 1px 3px;
+  border-radius: 3px;
+}
+
+.editor-link { 
+  color: var(--accent-blue); 
+  text-decoration: underline; 
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.editor-quote {
+  margin: 0;
+  margin-left: 20px;
+  margin-bottom: 8px; /* Para consistência com parágrafos */
+  padding-left: 15px;
+  border-left: 4px solid var(--accent-secondary);
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* Tags Section */
+.tags-section .sidebar-heading {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-item {
+  display: inline-block;
+  padding: 6px 12px !important;
+  cursor: pointer;
+  border-radius: 50px !important;
+  background-color: var(--button-bg) !important;
+  color: var(--text-primary) !important;
+  font-size: 0.85rem !important;
+  border: 1px solid var(--button-bg) !important;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  line-height: 1.2;
+}
+
+.tag-item:hover {
+  background-color: var(--button-hover) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--button-hover) !important;
+}
+
+.tag-item.active-tag {
+  background-color: var(--accent-yellow) !important;
+  color: var(--text-contrast) !important;
+  font-weight: bold;
+  border-color: var(--accent-yellow) !important;
+}
+
+.tag-item.active-tag .tag-name {
+  color: var(--text-contrast) !important;
+}
+
+.tag-item .bi-hash {
+  opacity: 0.7;
+}
+
+.no-tags-message {
+  color: var(--text-tertiary);
+  font-style: italic;
+  padding: 5px 0;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+/* Tag Filter Title in NoteList */
+.tag-filter-title {
+  color: var(--accent-yellow);
+  font-weight: 1000;
+  font-size: 2rem;
+}
+
+[data-theme="light"] .tag-filter-title {
+  color: var(--text-primary);
+}
+
+/* Window Controls */
+.window-controls-container {
+  padding: 10px;
+}
+
+.window-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px;
+  width: fit-content;
+}
+
+.control {
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+  background-color: var(--window-control-bg);
+  transition: background-color 0.3s ease;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050; /* Ensure it's above other content */
+  backdrop-filter: blur(10px);
+}
+
+.modal-content {
+  background: var(--modal-bg);
+  color: var(--modal-text);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  width: 90%;
+  max-width: 480px; /* A good default max-width */
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow: hidden;
+  border: 1px solid var(--separator)
+}
+
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.modal-close-button {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: 200;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+.modal-close-button:hover {
+  opacity: 1;
+}
+
+.modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.modal-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  background-color: var(--bg-quaternary);
+}
+
+/* 2. Garantir que os botões da modal sigam o tema corretamente */
+.modal-footer .btn,
+.macos-modal-footer .btn {
+  min-height: 38px; /* Altura consistente */
+  border-radius: 50px !important; /* Bordas arredondadas consistentes para os botões */
+  font-weight: 500 !important;
+  padding: 8px 16px !important; /* Padding consistente */
+  transition: all 0.2s ease !important;
+}
+
+/* 3. Estilo específico para o botão Create (warning) */
+.modal-footer .btn-warning,
+.macos-modal-footer .btn-warning {
+  background-color: var(--accent-yellow) !important;
+  border-color: var(--accent-yellow) !important;
+  color: var(--text-primary) !important; /* Texto escuro no botão amarelo */
+  font-weight: 600 !important;
+}
+
+.modal-footer .btn-warning:hover,
+.macos-modal-footer .btn-warning:hover {
+  background-color: color-mix(in srgb, var(--accent-yellow) 85%, #000 15%) !important;
+  border-color: color-mix(in srgb, var(--accent-yellow) 85%, #000 15%) !important;
+  color: var(--text-primary) !important;
+}
+
+.modal-footer .btn-warning:disabled,
+.macos-modal-footer .btn-warning:disabled {
+  background-color: color-mix(in srgb, var(--accent-yellow) 50%, transparent 50%) !important;
+  border-color: color-mix(in srgb, var(--accent-yellow) 50%, transparent 50%) !important;
+  color: color-mix(in srgb, var(--text-primary) 50%, transparent 50%) !important;
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+}
+
+/* 4. Estilo específico para o botão Cancel (secondary) */
+.modal-footer .btn-secondary,
+.macos-modal-footer .btn-secondary {
+  background-color: var(--button-bg) !important;
+  border-color: var(--button-bg) !important;
+  color: var(--text-primary) !important;
+}
+
+.modal-footer .btn-secondary:hover,
+.macos-modal-footer .btn-secondary:hover {
+  background-color: var(--button-hover) !important;
+  border-color: var(--button-hover) !important;
+  color: var(--text-primary) !important;
+}
+
+/* 5. Melhorar a visibilidade do input na modal */
+.modal-content .form-control,
+.macos-modal-content .form-control {
+  background-color: var(--modal-input-field-bg) !important;
+  border: 1px solid var(--modal-input-field-border) !important;
+  color: var(--modal-text) !important;
+  border-radius: 6px !important;
+  padding: 10px 12px !important;
+  font-size: 14px !important;
+  transition: all 0.2s ease !important;
+}
+
+.modal-content .form-control:focus,
+.macos-modal-content .form-control:focus {
+  background-color: var(--modal-input-field-bg) !important;
+  border-color: var(--accent-blue) !important;
+  color: var(--modal-text) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-blue) 20%, transparent 80%) !important;
+  outline: none !important;
+}
+
+.modal-content .form-control::placeholder,
+.macos-modal-content .form-control::placeholder {
+  color: var(--text-tertiary) !important;
+  opacity: 0.8 !important;
+}
+
+/* 6. Ajustar o texto da modal para melhor contraste */
+.modal-body p,
+.macos-modal-body p {
+  color: var(--modal-text) !important;
+  margin-bottom: 15px !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+
+/* 7. Melhorar o título da modal */
+.modal-title,
+.macos-modal-title {
+  color: var(--modal-text) !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+}
+
+/* 8. Ajustes específicos para o tema claro */
+[data-theme="light"] {
+  --modal-bg: #ffffff;
+  --modal-text: #1d1d1f;
+  --modal-input-field-bg: #f6f6f6;
+  --modal-input-field-border: #d1d1d6;
+}
+
+/* 9. Garantir que a modal tenha boa visibilidade em ambos os temas */
+.modal-content,
+.macos-modal-content {
+  background-color: var(--modal-bg) !important;
+  color: var(--modal-text) !important;
+  border: 1px solid var(--modal-input-field-border) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 10. Melhorar o footer da modal */
+.modal-footer,
+.macos-modal-footer {
+  background-color: color-mix(in srgb, var(--modal-bg) 95%, var(--modal-input-field-bg) 5%) !important;
+  border-top: 1px solid var(--modal-input-field-border) !important;
+}
+
+.close-button {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: var(--modal-text);
+  padding: 0;
+  line-height: 1;
+  transition: color 0.3s ease;
+}
+
+.modal-content h2 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  text-align: center;
+  width: 100%;
+}
+
+.theme-modal-content {
+  background: var(--modal-bg);
+  color: var(--modal-text);
+  padding: 25px;
+  border-radius: 14px;
+  width: 320px;
+  max-width: 90%;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.theme-modal-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: center;
+  color: var(--modal-text);
+  transition: color 0.3s ease;
+}
+
+.theme-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.theme-option span {
+  font-size: 0.95rem;
+  color: var(--modal-text);
+  transition: color 0.3s ease;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.toggle-switch .toggle-input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-switch .toggle-label {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--modal-input-field-bg);
+  transition: .4s;
+  border-radius: 20px;
+}
+
+.toggle-switch .toggle-label:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: var(--modal-text);
+  transition: .4s;
+  border-radius: 50%;
+}
+
+.toggle-switch .toggle-input:checked + .toggle-label {
+  background-color: var(--modal-accent-button-bg);
+}
+
+.toggle-switch .toggle-input:focus + .toggle-label {
+  box-shadow: 0 0 1px var(--modal-accent-button-bg);
+}
+
+.toggle-switch .toggle-input:checked + .toggle-label:before {
+  transform: translateX(20px);
+}
+
+.theme-modal-actions {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+}
+
+.theme-modal-button {
+  background-color: var(--modal-accent-button-bg);
+  color: var(--modal-accent-button-text);
+  border: none;
+  padding: 10px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.theme-modal-button:hover {
+  background-color: color-mix(in srgb, var(--modal-accent-button-bg) 85%, #000000 15%);
+}
+
+/* Search Input */
+
+.custom-search {
+  background-color: var(--modal-input-field-bg) !important;
+  border: 1px solid var(--modal-input-field-border) !important;
+  color: var(--text-secondary) !important;
+  transition: all 0.3s ease;
+  border-radius: 25px !important;
+}
+
+/* Esconde o botão 'x' nativo dos campos de busca no Chrome/Safari/Electron */
+.custom-search::-webkit-search-decoration,
+.custom-search::-webkit-search-cancel-button,
+.custom-search::-webkit-search-results-button,
+.custom-search::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  display: none;
+}
+
+.search-wrapper .search-clear-button {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.25rem;
+  line-height: 1;
+  color: var(--bs-secondary-color);
+  background: none;
+  border: none;
+  z-index: 3; /* Garante que o botão fique sobre o campo de texto */
+}
+
+.search-wrapper .search-clear-button:hover,
+.search-wrapper .search-clear-button:focus {
+  color: var(--bs-body-color);
+  box-shadow: none;
+}
+
+/* Adiciona espaço no campo de busca para o botão não sobrepor o texto */
+.search-wrapper .form-control {
+  padding-right: 2.5rem;
+}
+
+
+
+.custom-search::placeholder {
+  color: var(--text-muted) !important;
+}
+
+
+.form-control.bg-secondary {
+  background-color: var(--modal-input-field-bg) !important;
+  border: 1px solid var(--modal-input-field-border) !important;
+  color: var(--modal-text) !important;
+}
+
+
+
+/* Dropdown Menus */
+.dropdown-menu {
+  background-color: var(--modal-bg) !important;
+  border: 1px solid var(--modal-input-field-border) !important;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-item {
+  color: var(--modal-text) !important;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: var(--button-hover) !important;
+  color: var(--text-primary) !important;
+}
+
+.dropdown-item.text-danger:hover {
+  background-color: #dc3545 !important;
+  color: white !important;
+}
+
+/* Text Muted */
+.text-muted {
+  color: var(--text-muted) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar-panel {
+    padding: 15px;
+  }
+  
+  .note-list-panel,
+  .editor-panel {
+    padding: 15px;
+  }
+  
+  .theme-modal-content {
+    width: 280px;
+    padding: 20px;
+  }
+}
+
+/* Estilos para as checklists do Lexical */
+
+.editor-list-checklist {
+  list-style: none;
+  padding-left: 20px;
+  margin: 8px 0;
+}
+
+.editor-listitem-unchecked,
+.editor-listitem-checked {
+  position: relative;
+  padding-left: 28px; /* Espaço para o checkbox */
+  margin-bottom: 8px;
+  cursor: pointer;
+  list-style-type: none; /* Remove qualquer marcador de lista padrão */
+  transition: color 0.2s ease;
+}
+
+/* A caixa do checkbox (pseudo-elemento ::before) */
+.editor-listitem-unchecked::before,
+.editor-listitem-checked::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  border-radius: 50px;
+  transition: all 0.2s ease;
+  border: 2px solid var(--text-secondary);
+  background-color: var(--bg-tertiary);
+}
+
+
+
+/* Estilo da caixa quando marcada */
+.editor-listitem-checked::before {
+  background-color: var(--accent-yellow);
+  border-color: var(--accent-yellow);
+}
+
+/* O 'check' (✓) dentro da caixa marcada (pseudo-elemento ::after) */
+.editor-listitem-checked::after {
+  content: '✓';
+  position: absolute;
+  left: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+}
+
+/* Estilo do texto quando o item está marcado */
+.editor-listitem-checked {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+/* Garante que o texto do item não marcado use a cor primária */
+.editor-listitem-unchecked {
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+/* Aninhamento de checklists */
+.editor-list-checklist .editor-list-checklist {
+  margin-left: 25px;
+}
+
+.editor-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 10px 0;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.editor-image.selected {
+  border-color: var(--accent-blue);
+}
+
+/* Estilos para drag-and-drop */
+
+/* Quando uma nota está sendo arrastada */
+.note-item[draggable="true"]:hover {
+  cursor: grab;
+}
+
+.note-item[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+/* Pasta sendo arrastada sobre (drop target) */
+.folder-item.drag-over {
+  background-color: var(--bs-primary-bg-subtle) !important;
+  border-color: var(--bs-primary) !important;
+  border-width: 2px !important;
+  border-style: dashed !important;
+}
+
+/* Pastas quando há drag ativo (possíveis targets) */
+.folder-item.drag-target {
+  transition: all 0.2s ease;
+  opacity: 0.8;
+}
+
+.folder-item.drag-target:not(.drag-over) {
+  border: 1px dashed var(--bs-border-color-translucent);
+}
+
+/* Indicador visual de drop */
+.folder-item .bi-arrow-down-circle-fill {
+  color: var(--bs-primary);
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Nota sendo arrastada */
+.note-item.dragging {
+  opacity: 0.5;
+  transform: rotate(5deg);
+  z-index: 1000;
+}
+
+/* Disable pointer events during drag */
+.folder-item.drag-over * {
+  pointer-events: none;
+}
+
+/* Restaurar pointer events para dropdown */
+.folder-item .dropdown {
+  pointer-events: all;
+}
+
+/* macOS Modal Styles */
+.macos-modal-overlay {
+  background: rgba(30, 30, 32, 0.32);
+  backdrop-filter: blur(16px) saturate(180%);
+  animation: macos-modal-fadein 0.18s cubic-bezier(.4,0,.2,1);
+}
+
+@keyframes macos-modal-fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.macos-modal-content {
+  background: var(--modal-bg);
+  color: var(--modal-text);
+  border-radius: 14px;
+  box-shadow: 0 16px 48px 0 rgba(0,0,0,0.28), 0 1.5px 6px 0 rgba(0,0,0,0.08);
+  width: 100%;
+  max-width: 420px;
+  min-width: 320px;
+  margin: 0 16px;
+  display: flex;
+  flex-direction: column;
+  animation: macos-modal-popin 0.22s cubic-bezier(.4,0,.2,1);
+  transition: box-shadow 0.2s, background 0.2s;
+  overflow: hidden;
+}
+
+@keyframes macos-modal-popin {
+  from { transform: scale(0.96) translateY(24px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.macos-modal-header {
+  padding: 24px 28px 0 28px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border: none;
+  background: transparent;
+}
+
+.macos-modal-title {
+  font-size: 1.18rem;
+  font-weight: 600;
+  color: var(--modal-text);
+  margin: 0;
+  letter-spacing: 0.01em;
+  line-height: 1.3;
+  flex: 1;
+}
+
+.macos-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.7rem;
+  color: var(--text-muted);
+  opacity: 0.7;
+  cursor: pointer;
+  margin-left: 16px;
+  margin-top: -4px;
+  transition: color 0.18s, opacity 0.18s;
+}
+.macos-modal-close:hover {
+  color: var(--accent-blue);
+  opacity: 1;
+}
+
+.macos-modal-body {
+  padding: 22px 28px 0 28px;
+  font-size: 1.01rem;
+  color: var(--modal-text);
+  line-height: 1.6;
+  min-height: 48px;
+  word-break: break-word;
+}
+
+.macos-modal-footer {
+  padding: 18px 28px 24px 28px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  background: transparent;
+  border: none;
+}
+
+.macos-modal-footer .btn,
+.macos-modal-footer .button,
+.macos-modal-footer button {
+  min-width: 92px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 8px 0;
+  margin-left: 0;
+  margin-right: 0;
+  box-shadow: none;
+  transition: background 0.18s, color 0.18s;
+}
+
+.macos-modal-footer .btn-primary,
+.macos-modal-footer .button-primary {
+  background: var(--accent-blue);
+  color: #fff;
+  border: none;
+}
+.macos-modal-footer .btn-primary:hover,
+.macos-modal-footer .button-primary:hover {
+  background: color-mix(in srgb, var(--accent-blue) 85%, #000 15%);
+}
+
+.macos-modal-footer .btn-secondary,
+.macos-modal-footer .button-secondary {
+  background: var(--button-bg);
+  color: var(--text-primary);
+  border: none;
+}
+.macos-modal-footer .btn-secondary:hover,
+.macos-modal-footer .button-secondary:hover {
+  background: var(--button-hover);
+}
+
+.macos-modal-footer .btn-warning,
+.macos-modal-footer .button-warning {
+  background: var(--accent-yellow);
+  color: var(--text-contrast);
+  border: none;
+}
+.macos-modal-footer .btn-warning:hover,
+.macos-modal-footer .button-warning:hover {
+  background: color-mix(in srgb, var(--accent-yellow) 85%, #000 15%);
+}
+
+@media (max-width: 600px) {
+  .macos-modal-content {
+    min-width: 0;
+    max-width: 98vw;
+    padding: 0;
+  }
+  .macos-modal-header,
+  .macos-modal-body,
+  .macos-modal-footer {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
+.sidebar-section {
+  margin-bottom: 24px;
+  padding: 16px;
+  background: var(--bg-quaternary);
+  border-radius: 12px;
+}
+
+
+/* Botão "New Note" fixo no canto superior direito do editor */
+.new-note-button-fixed {
+  /* Mantém o estilo base da toolbar */
+  background-color: var(--bg-secondary) ;
+  border-radius: 50px ; /* Mesmo raio da toolbar em vez de circular */
+  
+  /* Dimensões consistentes com os botões da toolbar */
+  width: 60px;
+  height: 60px ;
+  padding: 0 ; /* Remove padding do Bootstrap */
+  
+  /* Posicionamento fixo */
+  position: absolute;
+  top: 0px;
+  right: 28px;
+  z-index: 1000;
+  
+  /* Estilo visual */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border-color: var(--separator-primary); /* MODIFICADO: Usa variável de tema */
+  
+  /* Cores e transições */
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+  
+  /* Fonte do ícone */
+  font-size: 18px;
+  
+  /* Remove estilos do Bootstrap que podem interferir */
+  text-decoration: none ;
+  font-weight: normal;
+}
+
+.new-note-button-no-note {
+  width: 60px;
+  height: 60px;
+  border-radius: 50px;
+  border: 1px solid var(--separator-secondary) !important;
+  background-color: #ff0000 !important; 
+  color: #ffffff !important;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-toggle-button {
+  width: 50px; /* Aumentado de 48px */
+  height: 50px; /* Aumentado de 48px */
+  color: var(--text-primary); /* Cor do ícone (claro no tema escuro) */
+  font-size: 26px; /* Ícone um pouco maior */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.sidebar-toggle-button:hover {
+  background-color: var(--button-hover);
+  border-color: var(--separator-primary);
+}
+
+/* Estilos para a sidebar quando ela é um overlay */
+.sidebar-panel.is-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px; /* Largura da sidebar no modo overlay */
+  z-index: 1000;
+  background-color: var(--bg-primary);
+  box-shadow: 4px 0px 15px rgba(0, 0, 0, 0.2);
+  border-right: 1px solid var(--separator-primary);
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Fundo escurecido quando a sidebar está aberta */
+.sidebar-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999; /* Abaixo da sidebar, acima do resto */
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.new-note-button-fixed:hover,
+.new-note-button-fixed:focus {
+  background-color: var(--button-hover) !important;
+  border-color: var(--separator-primary) !important;
+  color: var(--text-primary) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  outline: none !important;
+  text-decoration: none !important;
+}
+
+.new-note-button-fixed:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--button-active) !important;
+}
+
+.new-note-button-fixed:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent-blue) !important;
+}
+
+
+
+
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .new-note-button-fixed {
+    top: 12px !important;
+    right: 12px !important;
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 16px !important;
+  }
+}
+
+.toolbar-popover {
+  z-index: 1100 !important; /* Mais alto que os modais (1050) e o header (1010) */
+}
+
+/* Custom Buttons for Trash View */
+.btn-recover,
+.btn-delete-permanent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50px !important; /* Consistent with other buttons */
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.btn-recover {
+  background-color: var(--accent-green) !important;
+  border-color: var(--accent-green) !important;
+  color: var(--text-contrast) !important;
+}
+
+.btn-recover:hover {
+  background-color: color-mix(in srgb, var(--accent-green) 85%, #000 15%) !important;
+  border-color: color-mix(in srgb, var(--accent-green) 85%, #000 15%) !important;
+}
+
+.btn-delete-permanent {
+  background-color: var(--accent-danger) !important;
+  border-color: var(--accent-danger) !important;
+  color: var(--text-contrast) !important;
+}
+
+.btn-delete-permanent:hover {
+  background-color: color-mix(in srgb, var(--accent-danger) 85%, #000 15%) !important;
+  border-color: color-mix(in srgb, var(--accent-danger) 85%, #000 15%) !important;
+}
+
+.editor-image-placeholder,
+.editor-image-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  color: #666;
+  background-color: #f9f9f9;
+  min-height: 100px;
+}
+
+.editor-image-error {
+  border-color: #dc3545;
+  color: #dc3545;
+  background-color: #f8d7da;
+}
+
+.editor-image-placeholder i,
+.editor-image-error i {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+/* Adicione estes estilos ao seu arquivo de CSS do editor (Editor.css ou styles.css) */
+
+/* Estilos para links no editor Lexical */
+.editor-input a,
+.editor-link {
+  color: var(--accent-primary, #EBB800);
+  text-decoration: underline;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.editor-input a:hover,
+.editor-link:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* Indicador visual de link externo */
+.editor-input a[target="_blank"]::after,
+.editor-link[target="_blank"]::after {
+  content: " ↗";
+  font-size: 0.8em;
+  vertical-align: super;
+  opacity: 0.7;
+}
+
+/* Remove o outline padrão do navegador em links focados */
+.editor-input a:focus,
+.editor-link:focus {
+  outline: 2px solid var(--accent-primary, #EBB800);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Previne que links quebrem o layout */
+.editor-input a,
+.editor-link {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Estilo para links em modo de leitura */
+.editor-input[contenteditable="false"] a,
+.editor-input[contenteditable="false"] .editor-link {
+  cursor: pointer;
+}
+
+/* CORREÇÃO: Adiciona o cursor de ponteiro para links no editor */
+.editor-input a[data-lexical-link="true"] {
+  cursor: pointer;
+}
+
+/* Tooltip personalizado para links */
+.editor-input a[title]:hover::before {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-tertiary, #2a2a2a);
+  color: var(--text-primary, #ffffff);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+  pointer-events: none;
+  margin-bottom: 4px;
+}

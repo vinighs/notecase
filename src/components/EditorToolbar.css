@@ -1,0 +1,303 @@
+/* src/components/EditorToolbar.css */
+
+/* --- Container Principal da Toolbar --- */
+.toolbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Espaçamento entre os botões */
+  background-color: var(--bg-editor); /* ou var(--bg-editor), conforme o visual desejado */
+  border: 1px solid var(--separator-secondary);
+  border-radius: 50px; /* Bordas totalmente arredondadas */
+  padding: 5px 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  max-width: fit-content;
+  margin: 0 auto; /* Centraliza a toolbar */
+  transition: all 0.3s ease;
+  /* CORREÇÃO: Evita que a toolbar ultrapasse o container pai */
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+/* --- Botão Padrão da Toolbar --- */
+.toolbar-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent; 
+  color: var(--text-primary); /* CORRIGIDO: usar variável do tema */
+  border: 1px solid transparent; /* Borda transparente para manter o tamanho */
+  border-radius: 50px; /* Botões circulares */
+  cursor: pointer;
+  /* Otimização: Seja explícito sobre quais propriedades animar */
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 16px; /* Tamanho do ícone */
+  padding: 0; /* Reseta o padding padrão do Bootstrap */
+  /* CORREÇÃO: Evita que botões encolham demais */
+  flex-shrink: 0;
+  /* Otimização: Prepara o navegador para animar transform e box-shadow */
+  will-change: transform, box-shadow;
+}
+
+.toolbar-popover {
+  z-index: 1100 !important; /* Mais alto que os modais (1050) e o header (1010) */
+}
+
+/* Tamanhos dos botões */
+.toolbar-button.size-regular {
+  width: 48px;
+  height: 48px;
+}
+
+.toolbar-button.size-compact {
+  width: 40px;
+  height: 40px;
+}
+
+/* --- Efeitos de Interação --- */
+.toolbar-button:hover {
+  background-color: var(--button-hover);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 50px !important;
+}
+
+.toolbar-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 50px !important;
+}
+
+.toolbar-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-blue);
+  border-radius: 50px !important;
+  z-index: 1; /* Garante que o foco fique por cima de outros elementos */
+}
+
+/* --- Botão Ativo (pressionado) --- */
+.toolbar-button[aria-pressed="true"] {
+  background-color: var(--accent-primary); /* Usar variável do tema */
+  color: var(--text-contrast);
+  border-color: var(--accent-primary);
+  border-radius: 50px !important;
+}
+
+.toolbar-button[aria-pressed="true"]:hover {
+  background-color: color-mix(in srgb, var(--accent-primary) 85%, #000000 15%);
+  border-color: color-mix(in srgb, var(--accent-primary) 85%, #000000 15%);
+  border-radius: 50px !important;
+}
+
+/* --- Separador Vertical --- */
+.toolbar-separator {
+  width: 1px;
+  height: 24px;
+  background-color: var(--separator-secondary);
+  margin: 0 8px;
+  opacity: 0.6;
+  /* CORREÇÃO: Também pode encolher se necessário */
+  flex-shrink: 1;
+}
+
+/* --- Animação para Ícones --- */
+.toolbar-button i {
+  transition: transform 0.2s ease, color 0.2s ease; /* CORRIGIDO: adicionar transição de cor */
+  color: inherit; /* CORRIGIDO: herdar cor do botão pai */
+}
+
+.toolbar-button:hover i {
+  transform: scale(1.05);
+  color: inherit; /* CORRIGIDO: herdar cor do estado hover */
+}
+
+/* --- CORREÇÃO: Estilos específicos para os ícones da toolbar --- */
+.toolbar-button i {
+  color: var(--text-primary); /* CORRIGIDO: usar variável do tema */
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* Estado hover para ícones */
+.toolbar-button:hover i {
+  color: var(--text-primary); /* CORRIGIDO: manter consistência */
+}
+
+/* Estado ativo para ícones */
+.toolbar-button[aria-pressed="true"] i {
+  color: var(--text-contrast); /* CORRIGIDO: alto contraste para botões ativos */
+}
+
+/* --- CORREÇÃO: Estilos para os controles do editor --- */
+editor-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+  min-height: 60px;
+  position: relative; /* ADICIONADO: Para servir como referência para posicionamento absoluto */
+  padding: 0 16px; /* ADICIONADO: Padding consistente */
+}
+
+.editor-toolbar-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+  min-width: 0;
+  overflow: hidden;
+  position: relative; /* ADICIONADO: Contexto de posicionamento */
+}
+
+.editor-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0; /* Nunca encolhe */
+  /* CORREÇÃO: Define uma largura mínima para as ações */
+  min-width: 60px;
+}
+
+
+
+/* --- CORREÇÃO: Estilos específicos para o botão de formatação de texto (Aa) --- */
+.text-format-button {
+  color: var(--text-primary) !important;
+  font-weight: 500;
+}
+
+.text-format-button:hover {
+  color: var(--text-primary) !important;
+}
+
+/* --- CORREÇÃO: Botão de lock/unlock --- */
+.toolbar-button .bi-lock,
+.toolbar-button .bi-unlock {
+  color: var(--text-primary) !important;
+}
+
+.toolbar-button:hover .bi-lock,
+.toolbar-button:hover .bi-unlock {
+  color: var(--text-primary) !important;
+}
+
+/* --- Responsividade --- */
+@media (max-width: 768px) {
+  .toolbar-container {
+    gap: 6px; /* Menor espaçamento em telas menores */
+    padding: 4px 12px;
+    /* CORREÇÃO: Reduz ainda mais o padding em telas pequenas */
+    padding: 3px 8px;
+  }
+
+  .toolbar-button.size-regular,
+  .toolbar-button.size-compact {
+    width: 44px;
+    height: 44px;
+    font-size: 16px;
+  }
+
+  /* CORREÇÃO: Ajusta os controles do editor para mobile */
+  .editor-controls {
+    gap: 8px;
+    min-width: 250px;
+  }
+
+  .toolbar-separator {
+    margin: 0 4px; /* Reduz margem do separador */
+  }
+}
+
+@media (max-width: 480px) {
+  .toolbar-container {
+    gap: 4px;
+    padding: 3px 6px;
+  }
+
+  .toolbar-button.size-regular,
+  .toolbar-button.size-compact {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  /* CORREÇÃO: Para telas muito pequenas, prioriza funcionalidade */
+  .editor-controls {
+    gap: 6px;
+    min-width: 200px;
+  }
+
+
+
+  /* CORREÇÃO: Esconde o separador em telas muito pequenas se necessário */
+  .toolbar-separator {
+    display: none;
+  }
+}
+
+/* --- CORREÇÃO: Estilo adicional para prevenir overflow --- */
+@media (max-width: 400px) {
+  .editor-toolbar-wrapper {
+    /* Em telas muito pequenas, permite scroll horizontal se necessário */
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+  }
+
+  .editor-toolbar-wrapper::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+
+  .toolbar-container {
+    margin: 0; /* Remove margem automática */
+    min-width: fit-content;
+  }
+}
+
+/* --- Popover --- */
+.popover .popover-body {
+  padding: 12px !important;
+}
+
+.popover .btn {
+  border-radius: 25px !important;
+  margin-bottom: 4px !important;
+}
+
+/* --- CORREÇÃO ADICIONAL: Garantir que todos os ícones Bootstrap sigam o tema --- */
+.toolbar-button .bi::before,
+.toolbar-button i.bi::before {
+  color: inherit !important;
+}
+
+/* --- CORREÇÃO: Estilos específicos para diferentes estados dos botões --- */
+.toolbar-button.btn-outline-secondary {
+  color: var(--text-primary) !important;
+  border-color: transparent !important;
+}
+
+.toolbar-button.btn-outline-secondary:hover {
+  background-color: var(--button-hover) !important;
+  color: var(--text-primary) !important;
+  border-color: transparent !important;
+}
+
+.toolbar-button.btn-outline-secondary i {
+  color: var(--text-primary) !important;
+}
+
+/* --- CORREÇÃO: Para botões com variante warning (ativos) --- */
+.toolbar-button.btn-warning {
+  background-color: var(--accent-primary) !important;
+  color: var(--text-contrast) !important;
+  border-color: var(--accent-primary) !important;
+}
+
+.toolbar-button.btn-warning:hover {
+  background-color: color-mix(in srgb, var(--accent-primary) 85%, #000000 15%) !important;
+  color: var(--text-contrast) !important;
+  border-color: color-mix(in srgb, var(--accent-primary) 85%, #000000 15%) !important;
+}
+
+.toolbar-button.btn-warning i {
+  color: var(--text-contrast) !important;
+}
