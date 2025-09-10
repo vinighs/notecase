@@ -4,7 +4,9 @@
 # Build artifacts
 /dist
 /dist-electron
+/dist_electron
 /build
+/windows-store
 
 # Log files
 npm-debug.log*

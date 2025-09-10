@@ -8,6 +8,8 @@ import Modal from './components/Modal';
 import Button from './components/Button';
 import OnboardingModal from './components/OnboardingModal';
 import RenameFolderModal from './components/RenameFolderModal';
+import LoadingScreen from './components/LoadingScreen';
+
 
 
 const App = () => {
@@ -373,9 +375,9 @@ const handleDeleteNote = async (noteId) => {
 
   // --- Renderização ---
 
-  if (isAppLoading) {
-    return <div>Loading Application...</div>;
-  }
+if (isAppLoading) {
+  return <LoadingScreen />;
+}
 
   if (!vaultPath) {
     return <OnboardingModal on_create_vault={handleSelectVault} />;
